@@ -199,9 +199,10 @@ class _LoginScreenState extends State<LoginScreen>
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
                 colors: [
-                  Colors.blue.shade300,
-                  Colors.blue.shade600,
-                  Colors.blue.shade700,
+                  Colors.black,
+                  // Colors.grey.shade900,
+                  // Colors.blue.shade500,
+                  Colors.blue,
                 ],
               ),
             ),
@@ -289,14 +290,14 @@ class _LoginScreenState extends State<LoginScreen>
 
                         //PASSWORD RESET
                         Align(
-                          alignment: Alignment.centerRight,
+                          alignment: Alignment.center,
                           child: TextButton(
                             onPressed: forgotPassword,
                             child: const Text(
                               "Forgot Password?",
                               style: TextStyle(
                                 color: Colors.white,
-                                fontSize: 18,
+                                fontSize: 22,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -334,23 +335,28 @@ class _LoginScreenState extends State<LoginScreen>
                         SizedBox(
                           width: double.infinity,
                           height: 55,
-                          child: ElevatedButton.icon(
+                          child: ElevatedButton(
                             onPressed: isLoading ? null : googleLogin,
-                            icon: Image.asset(
-                              "assets/google.png",
-                              width: 200,
-                              height: 60,
-                            ),
-                            label: const Text(
-                              "Login",
-                              style: TextStyle(fontSize: 22),
-                            ),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.blue.shade100,
                               foregroundColor: Colors.blue.shade900,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(15),
                               ),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text(
+                                  "Login with",
+                                  style: TextStyle(fontSize: 22),
+                                ),
+                                Image.asset(
+                                  "assets/google.png",
+                                  width: 100,
+                                  height: 50,
+                                ),
+                              ],
                             ),
                           ),
                         ),
