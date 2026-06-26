@@ -3,11 +3,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final GoogleSignIn _googleSignIn = GoogleSignIn();
-
+  final GoogleSignIn _googleSignIn = GoogleSignIn(
+    scopes: ['email'],
+  );
 
 // EMAIL LOGIN
-  Future<User?> signIn(String email, String password) async {
+  Future<void> signIn(String email, String password) async {
     final result = await _auth.signInWithEmailAndPassword(
       email: email,
       password: password,
@@ -21,19 +22,17 @@ class AuthService {
         message: 'Please verify your email before logging in.',
       );
     }
-    return user;
   }
 
 
 // EMAIL SIGNUP
-  Future<User?> signUp(String email, String password) async {
+  Future<void> signUp(String email, String password) async {
     final result = await _auth.createUserWithEmailAndPassword(
       email: email,
       password: password,
     );
     await result.user?.sendEmailVerification();
     await _auth.signOut();
-    return result.user;
   }
 
 
