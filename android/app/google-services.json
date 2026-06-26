@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "245818385038",
+    "project_id": "cell-notation-app",
+    "storage_bucket": "cell-notation-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:245818385038:android:ffbbd21ba2df12a9bbdfdf",
+        "android_client_info": {
+          "package_name": "com.example.cell_notation_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "245818385038-lt2koh6b9tadjv4f6lr8m2v8pncvmfcg.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.cell_notation_app",
+            "certificate_hash": "8b41956c99a2582f3c098d76c609471578a6e9b7"
+          }
+        },
+        {
+          "client_id": "245818385038-u67pbhfe2csj3ri3imudoad04kt9kjhm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJMB9ImH95sYczTOgm-dYUx_uf-_1evWk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "245818385038-u67pbhfe2csj3ri3imudoad04kt9kjhm.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "245818385038-dc76rp53ea83h25inhr5ss85q44a544f.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.cellNotationApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
