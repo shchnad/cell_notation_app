@@ -37,17 +37,21 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // ✅ LOGOUT TOP RIGHT
+
       appBar: AppBar(
-        backgroundColor: Colors.black.withOpacity(0.3),
+        backgroundColor: Colors.black.withOpacity(0.9),
         elevation: 0,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.logout, color: Colors.white),
+          TextButton.icon(
             onPressed: () async {
               await FirebaseAuth.instance.signOut();
             },
-          ),
+            icon: const Icon(Icons.logout, color: Colors.white, size: 28),
+            label: const Text(
+              "Logout",
+              style: TextStyle(color: Colors.white, fontSize: 22),
+            ),
+          )
         ],
       ),
 
