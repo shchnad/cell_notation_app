@@ -1,0 +1,28 @@
+enum Instrument {
+  none,
+  piano,
+  keyboard,
+  organ,
+  accordion,
+  bayan,
+  guitar6Cord,
+  guitar7Cords,
+  guitarElectro,
+  guitarBass,
+  cello,
+  violon,
+  ukelele,
+  balalaika,
+  banjo,
+  harp,
+  harpsichord,
+  clarinet,
+  cornet,
+  flute,
+  horn,
+  saxophone,
+  trumpet,
+  trombone,
+  xylophone
+}
+

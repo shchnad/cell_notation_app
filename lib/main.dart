@@ -1,10 +1,11 @@
+import 'package:cell_notation_app/screens/main_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'firebase_options.dart';
 import 'screens/login_screen.dart';
-import 'screens/home_screen.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -34,7 +35,7 @@ class MyApp extends StatelessWidget {
             final user = snapshot.data!;
 
             if (user.emailVerified) {
-              return HomeScreen();
+              return const MainShell();
             } else {
               FirebaseAuth.instance.signOut();
               return const LoginScreen();
