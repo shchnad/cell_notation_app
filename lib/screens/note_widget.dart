@@ -1,0 +1,48 @@
+import 'package:flutter/material.dart';
+import '../models/note.dart';
+import '../enums/status.dart';
+import '../enums/hand.dart';
+import '../enums/articulation.dart';
+
+
+class NoteWidget extends StatelessWidget {
+  final Note note;
+  final double size;
+
+  const NoteWidget({
+    super.key,
+    required this.note,
+    required this.size,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: size,
+      height: size,
+      child: Container(
+        decoration: BoxDecoration(
+          color: _color(),
+          border: Border.all(
+            color: Colors.grey.shade300, // 👈 GRID LINES BACK
+            width: 0.5,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Color _color() {
+    switch (note.status) {
+      case Status.empty:
+        return Colors.white;
+
+      case Status.start:
+        return note.hand == Hand.left ? Colors.blue : Colors.black;
+
+      case Status.hold:
+        return (note.hand == Hand.left ? Colors.blue : Colors.black)
+            .withOpacity(0.4);
+    }
+  }
+}

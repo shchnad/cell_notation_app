@@ -1,5 +1,10 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../enums/articulation.dart';
+import '../enums/hand.dart';
+import '../enums/status.dart';
+import '../models/beat.dart';
+import '../models/note.dart';
 import 'composition_screen.dart';
 import '../services/auth_service.dart';
 
@@ -68,10 +73,32 @@ class _HomeScreenState extends State<HomeScreen> {
                         foregroundColor: Colors.blue.shade900,
                       ),
                       onPressed: () {
+                        final beats = List.generate(
+                          16,
+                              (beatIndex) => Beat(
+                            id: 'beat_$beatIndex',
+                            index: beatIndex,
+                            notes: List.generate(
+                              56,
+                                  (row) => Note(
+                                row: row,
+                                status: Status.empty,
+                                hand: Hand.right,
+                                articulation: Articulation.none,
+                                finger: null,
+                                accidental: null,
+                                ornament: null,
+                                nuance: null,
+                                createdAt: DateTime.now(),
+                              ),
+                            ),
+                          ),
+                        );
+
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const CompositionScreen(),
+                            builder: (_) => CompositionScreen(beats: beats),
                           ),
                         );
                       },
