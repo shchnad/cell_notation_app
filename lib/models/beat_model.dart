@@ -1,4 +1,4 @@
-import 'note.dart';
+import 'note_model.dart';
 
 class Beat {
   final String id;

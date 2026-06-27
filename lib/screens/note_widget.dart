@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/note.dart';
+import '../dialog/note_dialog.dart';
+import '../models/note_model.dart';
 import '../enums/status.dart';
 import '../enums/hand.dart';
 import '../enums/articulation.dart';
@@ -17,15 +18,23 @@ class NoteWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: size,
-      height: size,
-      child: Container(
-        decoration: BoxDecoration(
-          color: _color(),
-          border: Border.all(
-            color: Colors.grey.shade300, // 👈 GRID LINES BACK
-            width: 0.5,
+    return GestureDetector(
+      onDoubleTap: () {
+        showDialog(
+          context: context,
+          builder: (_) => NoteDialog(note: note),
+        );
+      },
+      child: SizedBox(
+        width: size,
+        height: size,
+        child: Container(
+          decoration: BoxDecoration(
+            color: _color(),
+            border: Border.all(
+              color: Colors.grey.shade300,
+              width: 0.5,
+            ),
           ),
         ),
       ),

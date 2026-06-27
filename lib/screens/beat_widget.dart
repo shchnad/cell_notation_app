@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/beat.dart';
+import '../models/beat_model.dart';
 import 'note_widget.dart';
 
 

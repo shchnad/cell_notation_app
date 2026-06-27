@@ -5,12 +5,12 @@ enum Instrument {
   organ,
   accordion,
   bayan,
-  guitar6Cord,
-  guitar7Cords,
+  guitar6Strings,
+  guitar7Strings,
   guitarElectro,
   guitarBass,
   cello,
-  violon,
+  violin,
   ukelele,
   balalaika,
   banjo,
@@ -23,6 +23,7 @@ enum Instrument {
   saxophone,
   trumpet,
   trombone,
-  xylophone
+  xylophone,
+  customs,
 }
 

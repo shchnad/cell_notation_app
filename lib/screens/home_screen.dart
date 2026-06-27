@@ -1,12 +1,14 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import '../dialog/create_composition_dialog.dart';
 import '../enums/articulation.dart';
 import '../enums/hand.dart';
 import '../enums/status.dart';
-import '../models/beat.dart';
-import '../models/note.dart';
+import '../models/beat_model.dart';
+import '../models/note_model.dart';
 import 'composition_screen.dart';
 import '../services/auth_service.dart';
+
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -72,34 +74,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         backgroundColor: Colors.blue.shade100,
                         foregroundColor: Colors.blue.shade900,
                       ),
-                      onPressed: () {
-                        final beats = List.generate(
-                          16,
-                              (beatIndex) => Beat(
-                            id: 'beat_$beatIndex',
-                            index: beatIndex,
-                            notes: List.generate(
-                              56,
-                                  (row) => Note(
-                                row: row,
-                                status: Status.empty,
-                                hand: Hand.right,
-                                articulation: Articulation.none,
-                                finger: null,
-                                accidental: null,
-                                ornament: null,
-                                nuance: null,
-                                createdAt: DateTime.now(),
-                              ),
-                            ),
-                          ),
-                        );
+                      onPressed: () async {
 
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => CompositionScreen(beats: beats),
-                          ),
+                        await showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) => const CreateCompositionDialog(),
                         );
                       },
                       child: const Text(

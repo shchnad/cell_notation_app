@@ -7,8 +7,9 @@ import '../enums/accidental.dart';
 import '../enums/ornament.dart';
 
 class Note {
-  final int row; // 0–55 pitch grid
+  final int row;
   final Status status;
+  final  pitch;
   final Hand hand;
   final Finger? finger;
   final Accidental? accidental;
@@ -20,6 +21,7 @@ class Note {
   const Note({
     required this.row,
     required this.status,
+    required this.pitch,
     required this.hand,
     this.finger,
     this.accidental,

@@ -1,18 +1,19 @@
 enum Style {
   none,
+  blues,
+  barocco,
   classical,
   country,
-  jazz,
-  blues,
+  disco,
   folk,
-  pop,
-  raggae,
+  gregorian,
+  hiphop,
+  jazz,
   latino,
+  metal,
+  pop,
+  reggae,
+  rock,
+  techno,
 }
 
-
-//     List<String> style = [
-//     'classical','country','hip-hop','r&b','techno','jazz',
-//     'blues','folk','rock','metal','pop','punk','disco',
-//     'latin','barocco','reggae','religious','for kids'
-//     ];

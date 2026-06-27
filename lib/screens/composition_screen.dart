@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../models/beat.dart';
+import '../models/beat_model.dart';
 import '../screens/beat_widget.dart';
 import 'beat_widget.dart';
 
@@ -22,7 +22,7 @@ class CompositionScreen extends StatelessWidget {
       body: Row(
         children: [
 
-          // 🎛 LEFT SIDEBAR (NEW)
+          // LEFT SIDEBAR
           Container(
             width: 50,
             color: Colors.black,
@@ -49,7 +49,7 @@ class CompositionScreen extends StatelessWidget {
             ),
           ),
 
-          // 🎹 GRID AREA (UNCHANGED LOGIC)
+          // GRID AREA
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,

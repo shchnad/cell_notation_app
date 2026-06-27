@@ -1,4 +1,4 @@
-enum Duration {
+enum BeatDuration {
   whole(1.0),
   half(0.5),
   quarter(0.25),
@@ -8,5 +8,5 @@ enum Duration {
   sixtyFourth(0.015625);
 
   final double value;
-  const Duration(this.value);
+  const BeatDuration(this.value);
 }
