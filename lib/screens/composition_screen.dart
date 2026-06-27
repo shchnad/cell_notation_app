@@ -24,7 +24,7 @@ class CompositionScreen extends StatelessWidget {
 
           // 🎛 LEFT SIDEBAR (NEW)
           Container(
-            width: 80,
+            width: 50,
             color: Colors.black,
             child: SafeArea(
               child: Column(
@@ -32,7 +32,7 @@ class CompositionScreen extends StatelessWidget {
                   const SizedBox(height: 20),
 
                   IconButton(
-                    icon: const Icon(Icons.home, color: Colors.white),
+                    icon: const Icon(Icons.home, color: Colors.white, size: 40),
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -40,10 +40,10 @@ class CompositionScreen extends StatelessWidget {
 
                   const SizedBox(height: 20),
 
-                  const Icon(Icons.music_note, color: Colors.white),
+                  const Icon(Icons.music_note, color: Colors.white, size: 40),
                   const SizedBox(height: 20),
 
-                  const Icon(Icons.settings, color: Colors.white),
+                  const Icon(Icons.settings, color: Colors.white, size: 40),
                 ],
               ),
             ),
