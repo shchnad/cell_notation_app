@@ -3,6 +3,7 @@ import '../enums/instrument.dart';
 import '../enums/style.dart';
 import '../enums/beat_duration.dart';
 import '../services/content_filter_service.dart';
+import '../enums/tempo.dart';
 
 class CreateCompositionDialog extends StatefulWidget {
   const CreateCompositionDialog({super.key});
@@ -17,28 +18,32 @@ class _CreateCompositionDialogState
 
   int step = 0;
 
-  // TITLE
+  // 1 - TITLE
   final titleController = TextEditingController();
   final composerController = TextEditingController();
 
-  // STYLE
+  // 2 - STYLE
   Style selectedStyle = Style.none;
 
-  // INSTRUMENT
+  // 3 - INSTRUMENT
   Instrument selectedInstrument = Instrument.none;
   final customInstrumentController = TextEditingController();
   bool useCustomInstrument = false;
 
-  // TONALITY
+  // 4 - TONALITY
   String scale = "natural major";
   String tonic = "C";
 
-  // GRID
-  int beatCount = 16;
+  // 5 - BEAT DURATION
+  BeatDuration beatDuration = BeatDuration.quarter;
+
+  // 6 - TEMPO
+  Tempo selectedTempo = Tempo.lento;
+
+  // 7 - COLUMNS ADDING
+  int beatCount = 0;
   int beatsPerMeasure = 4;
 
-  // DURATION
-  BeatDuration beatDuration = BeatDuration.quarter;
 
   @override
   void dispose() {
@@ -76,16 +81,14 @@ class _CreateCompositionDialogState
 
   void createComposition() {
     final instrument = getFinalInstrument();
-
-    // HERE YOU WILL PASS DATA TO GRID ENGINE
     debugPrint("TITLE: ${titleController.text}");
     debugPrint("COMPOSER: ${composerController.text}");
     debugPrint("STYLE: ${selectedStyle.name}");
     debugPrint("INSTRUMENT: $instrument");
     debugPrint("TONALITY: $scale $tonic");
+    debugPrint("TEMPO: ${selectedTempo.name}");
     debugPrint("BEAT COUNT: $beatCount");
     debugPrint("BPM TYPE: ${beatDuration.name}");
-
     Navigator.pop(context);
   }
 
@@ -94,7 +97,7 @@ class _CreateCompositionDialogState
     return AlertDialog(
       title: Center(
         child: Text(
-          "Choose values for your composition (${step + 1}/6)",
+          "Enter value ${step + 1} of 7",
           style: const TextStyle(fontSize: 22),
         ),
       ),
@@ -107,7 +110,7 @@ class _CreateCompositionDialogState
         if (step > 0)
           TextButton(
             onPressed: () => setState(() => step--),
-            child: const Text("Back", style: TextStyle(fontSize: 22),),
+            child: const Text("Back", style: TextStyle(fontSize: 22)),
           ),
         ElevatedButton(
           onPressed: () {
@@ -117,49 +120,64 @@ class _CreateCompositionDialogState
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(
-                      "Enter title and composer",
-                      style: TextStyle(fontSize: 16),
+                      "Enter content",
+                      style: TextStyle(fontSize: 22),
                     ),
                   ),
                 );
                 return;
               }
-
               if (!ContentFilterService.isValid(titleController.text) ||
                   !ContentFilterService.isValid(composerController.text)) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text(
                       "Invalid content",
-                      style: TextStyle(fontSize: 16),
+                      style: TextStyle(fontSize: 22),
                     ),
                   ),
                 );
                 return;
               }
             }
-
-            if (step < 5) {
+            if (step < 6) {
               setState(() => step++);
             } else {
-              createComposition();
+               {
+                Navigator.pop(context, {
+                  "title": titleController.text.trim(),
+                  "composer": composerController.text.trim(),
+                  "style": selectedStyle,
+                  "instrument": getFinalInstrument(),
+                  "scale": scale,
+                  "tonic": tonic,
+                  "beatDuration": beatDuration,
+                  "tempo": selectedTempo,
+                  "beatCount": beatCount,
+                  "beatsPerMeasure": beatsPerMeasure,
+                });
+              }
             }
           },
-          child: Text(step == 5 ? "Create" : "Next", style: TextStyle(fontSize: 22)),
+          child: Text(step == 6 ? "Create" : "Next",
+              style: TextStyle(fontSize: 22)),
         ),
       ],
     );
   }
 
+
   Widget _buildStep() {
     switch (step) {
 
-    // TITLE
+    // 1 - TITLE
       case 0:
         return ListView(
           children: [
             const SizedBox(height: 20),
-            const Text("Input Title", style: TextStyle(fontSize: 22), textAlign: TextAlign.center),
+            const Text("Title of music",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center),
             TextField(
               controller: titleController,
               style: TextStyle(fontSize: 22, color: Colors.indigo),
@@ -168,23 +186,27 @@ class _CreateCompositionDialogState
               ),
             ),
             const SizedBox(height: 50),
-            const Text("Input Composer", style: TextStyle(fontSize: 22), textAlign: TextAlign.center),
+            const Text("Composer's name",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                textAlign: TextAlign.center
+            ),
             TextField(
               controller: composerController,
               style: TextStyle(fontSize: 22, color: Colors.indigo),
               decoration: const InputDecoration(
-                hintText: "e.g. J.S.Bach",
+                hintText: "e.g. Beethoven L.",
               ),
             ),
           ],
         );
 
-    // STYLE
+    // 2 - STYLE
       case 1:
         return Column(
           children: [
           const SizedBox(height: 20),
-          const Text("Choose Style", style: TextStyle(fontSize: 22)),
+          const Text("Style",
+              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
           SingleChildScrollView(
           child: Wrap(
             spacing: 10,
@@ -205,14 +227,15 @@ class _CreateCompositionDialogState
         ),
     ],);
 
-    // INSTRUMENT
+    // 3 - INSTRUMENT
       case 2:
         return SingleChildScrollView(
           child: Column(
             // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 20),
-              const Text("Choose Instrument", style: TextStyle(fontSize: 22)),
+              const Text("Instrument",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
               Wrap(
                 spacing: 10,
                 runSpacing: 10,
@@ -234,9 +257,7 @@ class _CreateCompositionDialogState
                   );
                 }).toList(),
               ),
-
               const SizedBox(height: 20),
-
               // CUSTOM INSTRUMENT
               RadioListTile<bool>(
                 title: const Text("Custom instrument"),
@@ -247,7 +268,6 @@ class _CreateCompositionDialogState
                   selectedInstrument = Instrument.none;
                 }),
               ),
-
               if (useCustomInstrument)
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -255,7 +275,7 @@ class _CreateCompositionDialogState
                     controller: customInstrumentController,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: "e.g. Electric Synth Pad",
+                      hintText: "type your instrument",
                     ),
                   ),
                 ),
@@ -263,19 +283,16 @@ class _CreateCompositionDialogState
           ),
         );
 
-    // TONALITY
+    // 4 - TONALITY
       case 3:
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-
-              const Text("Choose Tonality", style: TextStyle(fontSize: 22)),
               const SizedBox(height: 50),
-
               // SCALE SECTION
-              const Text("Choose Scale", style: TextStyle(fontSize: 22)),
-
+              const Text("Scale",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
               Wrap(
                 spacing: 10,
                 runSpacing: 10,
@@ -295,14 +312,11 @@ class _CreateCompositionDialogState
                   );
                 }).toList(),
               ),
-
               const SizedBox(height: 50),
-
               // TONIC SECTION
               const Text(
-                "Choose Tonic",
-                style: TextStyle(fontSize: 22)),
-
+                "Tonic",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
               Wrap(
                 spacing: 10,
                 runSpacing: 10,
@@ -329,41 +343,97 @@ class _CreateCompositionDialogState
           ),
         );
 
-    // DURATION
+
+    // 5 - BEAT DURATION
       case 4:
-        return ListView(
-          children: BeatDuration.values.map((d) {
-            return RadioListTile(
-              title: Text(beatLabel(d), style: TextStyle(fontSize: 22)),
-              value: d,
-              groupValue: beatDuration,
-              onChanged: (v) => setState(() => beatDuration = v!),
-            );
-          }).toList(),
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 20),
+
+              const Center(
+                child: Text("Beat Duration",
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                ),
+              ),
+              const SizedBox(height: 20),
+              ...BeatDuration.values.map((d) {
+                return RadioListTile<BeatDuration>(
+                  title: Text(
+                    beatLabel(d),
+                    style: const TextStyle(fontSize: 20),
+                  ),
+                  value: d,
+                  groupValue: beatDuration,
+                  onChanged: (value) {
+                    setState(() {
+                      beatDuration = value!;
+                    });
+                  },
+                );
+              }),
+            ],
+          ),
         );
 
-    // GRID
+
+    // 6 - TEMPO
       case 5:
+        return Column(
+          children: [
+            const SizedBox(height: 20),
+            const Text("Tempo",
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            SingleChildScrollView(
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 10,
+                children: Tempo.values.map((s) {
+                  return SizedBox(
+                    width: 260, // controls 2 columns
+                    child: RadioListTile<Tempo>(
+                      dense: true,
+                      title: Text(s.name, style: TextStyle(fontSize: 22),),
+                      value: s,
+                      groupValue: selectedTempo,
+                      onChanged: (v) => setState(() => selectedTempo = v!),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],);
+
+
+    // 7 - COLUMNS ADDING
+      case 6:
         return ListView(
           children: [
             TextField(
+              style: TextStyle(fontSize: 22, color: Colors.indigo),
               decoration: const InputDecoration(
-                labelText: "Beat count",
+                labelText: "Number of beats to add",
+                  labelStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)
               ),
               keyboardType: TextInputType.number,
               onChanged: (v) =>
-              beatCount = int.tryParse(v) ?? 16,
+              beatCount = int.tryParse(v) ?? 0,
             ),
+            const SizedBox(height: 20),
             TextField(
+              style: TextStyle(fontSize: 22, color: Colors.indigo),
               decoration: const InputDecoration(
-                labelText: "Beats per measure",
+                labelText: "Number of beats per measure",
+                  labelStyle: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)
               ),
               keyboardType: TextInputType.number,
               onChanged: (v) =>
-              beatsPerMeasure = int.tryParse(v) ?? 4,
+              beatsPerMeasure = int.tryParse(v) ?? 0,
             ),
           ],
         );
+
 
       default:
         return const SizedBox();

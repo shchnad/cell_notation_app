@@ -10,10 +10,9 @@ class Composition {
   final DateTime updatedAt;
   final String style;
   final String instrument;
-  final String scale;   // "natural major" or "natural minor"
-  final String tonic;   // "C", "D", "B flat", "F sharp", ...
-  final double beatDuration;     // real time unit
-  final int beatsPerMeasure;     // GLOBAL RULE
+  final String scale;
+  final String tonic;
+  final double beatDuration;
   final List<Beat> beats;
 
   Composition({
@@ -28,7 +27,6 @@ class Composition {
     required this.scale,
     required this.tonic,
     required this.beatDuration,
-    required this.beatsPerMeasure,
     required this.beats,
   });
 }

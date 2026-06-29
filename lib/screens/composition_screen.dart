@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/beat_model.dart';
-import '../screens/beat_widget.dart';
-import 'beat_widget.dart';
+import '../widgets/beat_widget.dart';
+import '../widgets/beat_widget.dart';
 
 class CompositionScreen extends StatelessWidget {
   final List<Beat> beats;
@@ -21,7 +21,6 @@ class CompositionScreen extends StatelessWidget {
     return Scaffold(
       body: Row(
         children: [
-
           // LEFT SIDEBAR
           Container(
             width: 50,
@@ -30,25 +29,20 @@ class CompositionScreen extends StatelessWidget {
               child: Column(
                 children: [
                   const SizedBox(height: 20),
-
                   IconButton(
                     icon: const Icon(Icons.home, color: Colors.white, size: 40),
                     onPressed: () {
                       Navigator.pop(context);
                     },
                   ),
-
                   const SizedBox(height: 20),
-
                   const Icon(Icons.music_note, color: Colors.white, size: 40),
                   const SizedBox(height: 20),
-
                   const Icon(Icons.settings, color: Colors.white, size: 40),
                 ],
               ),
             ),
           ),
-
           // GRID AREA
           Expanded(
             child: SingleChildScrollView(

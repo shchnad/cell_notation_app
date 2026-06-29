@@ -1,5 +1,5 @@
 import 'package:cell_notation_app/screens/composition_screen.dart';
-import 'package:cell_notation_app/screens/main_shell.dart';
+import 'package:cell_notation_app/navigation/main_shell.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';

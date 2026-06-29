@@ -75,12 +75,12 @@ class _HomeScreenState extends State<HomeScreen> {
                         foregroundColor: Colors.blue.shade900,
                       ),
                       onPressed: () async {
-
-                        await showDialog(
+                        final data = await showDialog<Map<String, dynamic>>(
                           context: context,
                           barrierDismissible: false,
                           builder: (_) => const CreateCompositionDialog(),
                         );
+                        if (data == null) return;
                       },
                       child: const Text(
                         "Create Cellnotation",
