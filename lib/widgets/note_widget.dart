@@ -43,7 +43,7 @@ class NoteWidget extends StatelessWidget {
 
   Color _color() {
     switch (note.status) {
-      case Status.empty:
+      case Status.silence:
         return Colors.white;
 
       case Status.start:

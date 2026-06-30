@@ -1,5 +1,5 @@
 enum Status {
   start,
   hold,
-  empty,
+  silence,
 }

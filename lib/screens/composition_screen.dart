@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
+import '../enums/hand.dart';
+import '../enums/status.dart';
 import '../models/beat_model.dart';
+import '../models/note_model.dart';
 import '../widgets/beat_widget.dart';
 import '../widgets/beat_widget.dart';
 
 class CompositionScreen extends StatelessWidget {
-  final List<Beat> beats;
+  final Map<String, dynamic> config;
 
   const CompositionScreen({
     super.key,
-    required this.beats,
+    required this.config,
   });
 
   @override
@@ -17,6 +20,27 @@ class CompositionScreen extends StatelessWidget {
 
     // 56 rows must fit exactly
     final cellSize = screenHeight / 56;
+
+
+    final int beatCount = config["beatCount"];
+    final double beatDuration = (config["beatDuration"] as dynamic).value;
+    final List<Beat> beats = List.generate(beatCount, (i) {
+      return Beat(
+        id: i.toString(),
+        index: i,
+        beatDuration: beatDuration,
+        measureId: i ~/ 4, // temporary logic (you can improve later)
+        notes: List.generate(56, (row) {
+          return Note(
+            row: row,
+            status: Status.silence,
+            pitch: null,
+            hand: Hand.right,
+            createdAt: DateTime.now(),
+          );
+        }),
+      );
+    });
 
     return Scaffold(
       body: Row(

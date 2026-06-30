@@ -81,6 +81,14 @@ class _HomeScreenState extends State<HomeScreen> {
                           builder: (_) => const CreateCompositionDialog(),
                         );
                         if (data == null) return;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => CompositionScreen(
+                              config: data,
+                            ),
+                          ),
+                        );
                       },
                       child: const Text(
                         "Create Cellnotation",
