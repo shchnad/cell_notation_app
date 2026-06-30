@@ -1,5 +1,5 @@
 enum Style {
-  none,
+  any,
   blues,
   barocco,
   classical,

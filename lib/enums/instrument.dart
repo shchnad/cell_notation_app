@@ -1,5 +1,5 @@
 enum Instrument {
-  none,
+  any,
   piano,
   keyboard,
   organ,
@@ -24,6 +24,5 @@ enum Instrument {
   trumpet,
   trombone,
   xylophone,
-  customs,
 }
 

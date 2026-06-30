@@ -18,15 +18,17 @@ class _CreateCompositionDialogState
 
   int step = 0;
 
+  String? customInstrumentError;
+
   // 1 - TITLE
   final titleController = TextEditingController();
   final composerController = TextEditingController();
 
   // 2 - STYLE
-  Style selectedStyle = Style.none;
+  Style selectedStyle = Style.any;
 
   // 3 - INSTRUMENT
-  Instrument selectedInstrument = Instrument.none;
+  Instrument selectedInstrument = Instrument.any;
   final customInstrumentController = TextEditingController();
   bool useCustomInstrument = false;
 
@@ -35,7 +37,7 @@ class _CreateCompositionDialogState
   String tonic = "C";
 
   // 5 - BEAT DURATION
-  BeatDuration beatDuration = BeatDuration.quarter;
+  BeatDuration beatDuration = BeatDuration.eighth;
 
   // 6 - TEMPO
   Tempo selectedTempo = Tempo.lento;
@@ -72,32 +74,12 @@ class _CreateCompositionDialogState
     }
   }
 
-  String getFinalInstrument() {
-    if (useCustomInstrument) {
-      return customInstrumentController.text.trim();
-    }
-    return selectedInstrument.name;
-  }
-
-  void createComposition() {
-    final instrument = getFinalInstrument();
-    debugPrint("TITLE: ${titleController.text}");
-    debugPrint("COMPOSER: ${composerController.text}");
-    debugPrint("STYLE: ${selectedStyle.name}");
-    debugPrint("INSTRUMENT: $instrument");
-    debugPrint("TONALITY: $scale $tonic");
-    debugPrint("TEMPO: ${selectedTempo.name}");
-    debugPrint("BEAT COUNT: $beatCount");
-    debugPrint("BPM TYPE: ${beatDuration.name}");
-    Navigator.pop(context);
-  }
-
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Center(
         child: Text(
-          "Enter value ${step + 1} of 7",
+          "values ${step + 1} of 7",
           style: const TextStyle(fontSize: 22),
         ),
       ),
@@ -140,6 +122,34 @@ class _CreateCompositionDialogState
                 return;
               }
             }
+            if (step == 2) {
+              if (useCustomInstrument) {
+              if (customInstrumentController.text.trim().isEmpty ||
+                  !ContentFilterService.isValid(customInstrumentController.text.trim())) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "invalid instrument name",
+                      style: TextStyle(fontSize: 22),
+                    ),
+                  ),
+                );
+                return;
+              }
+            }
+              if (!ContentFilterService.isValid(titleController.text) ||
+                  !ContentFilterService.isValid(composerController.text)) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text(
+                      "Invalid content",
+                      style: TextStyle(fontSize: 22),
+                    ),
+                  ),
+                );
+                return;
+              }
+            }
             if (step < 6) {
               setState(() => step++);
             } else {
@@ -148,7 +158,9 @@ class _CreateCompositionDialogState
                   "title": titleController.text.trim(),
                   "composer": composerController.text.trim(),
                   "style": selectedStyle,
-                  "instrument": getFinalInstrument(),
+                  "instrument": useCustomInstrument
+                    ? customInstrumentController.text.trim()
+                    : selectedInstrument.name,
                   "scale": scale,
                   "tonic": tonic,
                   "beatDuration": beatDuration,
@@ -174,7 +186,7 @@ class _CreateCompositionDialogState
       case 0:
         return ListView(
           children: [
-            const SizedBox(height: 20),
+            // const SizedBox(height: 20),
             const Text("Title of music",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                 textAlign: TextAlign.center),
@@ -201,16 +213,17 @@ class _CreateCompositionDialogState
         );
 
     // 2 - STYLE
+
       case 1:
         return Column(
           children: [
-          const SizedBox(height: 20),
+          // const SizedBox(height: 20),
           const Text("Style",
               style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
           SingleChildScrollView(
           child: Wrap(
-            spacing: 10,
-            runSpacing: 10,
+            spacing: 5,
+            runSpacing: 5,
             children: Style.values.map((s) {
               return SizedBox(
                 width: 260, // controls 2 columns
@@ -228,74 +241,115 @@ class _CreateCompositionDialogState
     ],);
 
     // 3 - INSTRUMENT
+
       case 2:
         return SingleChildScrollView(
           child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const Text(
+                "Instrument",
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 15),
+              // CUSTOM INSTRUMENT
+              RadioListTile<bool>(
+                dense: true,
+                visualDensity: const VisualDensity(
+                  horizontal: -4,
+                  vertical: -4,
+                ),
+                contentPadding: EdgeInsets.zero,
+                title: const Text(
+                  "Custom instrument",
+                  style: TextStyle(fontSize: 22),
+                ),
+                value: true,
+                groupValue: useCustomInstrument,
+                onChanged: (v) => setState(() {
+                  useCustomInstrument = v!;
+                  if (useCustomInstrument) {
+                    selectedInstrument = Instrument.any;
+                  }
+                }),
+                subtitle: useCustomInstrument
+                    ? Padding(
+                  padding: const EdgeInsets.only(top: 8),
+                  child: TextField(
+                    controller: customInstrumentController,
+                    onChanged: (value) {
+                      setState(() {
+                        if (value.isEmpty ||
+                            ContentFilterService.isValid(value)) {
+                          customInstrumentError = null;
+                        } else {
+                          customInstrumentError =
+                          "Invalid instrument name";
+                        }
+                      });
+                    },
+                    decoration: InputDecoration(
+                      border: const OutlineInputBorder(),
+                      hintText: "Type your instrument",
+                      hintStyle: const TextStyle(fontSize: 22),
+                      errorText: customInstrumentError,
+                    ),
+                  ),
+                )
+                    : null,
+              ),
               const SizedBox(height: 20),
-              const Text("Instrument",
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+              // PREDEFINED INSTRUMENTS
               Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: Instrument.values
-                    .where((i) => i != Instrument.none)
-                    .map((instrument) {
+                spacing: 0,
+                runSpacing: 0,
+                children: Instrument.values.map((instrument) {
                   return SizedBox(
-                    width: 260, // 👈 2 columns
+                    width: 260,
                     child: RadioListTile<Instrument>(
                       dense: true,
-                      title: Text(instrument.name, style: TextStyle(fontSize: 22),),
+                      visualDensity: const VisualDensity(
+                        horizontal: -4,
+                        vertical: -4,
+                      ),
+                      contentPadding: EdgeInsets.zero,
+                      title: Text(
+                        instrument.name,
+                        style: const TextStyle(fontSize: 20),
+                      ),
                       value: instrument,
                       groupValue: selectedInstrument,
                       onChanged: (v) => setState(() {
                         selectedInstrument = v!;
                         useCustomInstrument = false;
+                        customInstrumentError = null;
                       }),
                     ),
                   );
                 }).toList(),
               ),
-              const SizedBox(height: 20),
-              // CUSTOM INSTRUMENT
-              RadioListTile<bool>(
-                title: const Text("Custom instrument"),
-                value: true,
-                groupValue: useCustomInstrument,
-                onChanged: (v) => setState(() {
-                  useCustomInstrument = true;
-                  selectedInstrument = Instrument.none;
-                }),
-              ),
-              if (useCustomInstrument)
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: TextField(
-                    controller: customInstrumentController,
-                    decoration: const InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: "type your instrument",
-                    ),
-                  ),
-                ),
             ],
           ),
         );
 
     // 4 - TONALITY
+
       case 3:
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const SizedBox(height: 50),
+              // const SizedBox(height: 20),
+
               // SCALE SECTION
+
               const Text("Scale",
                   style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
               Wrap(
-                spacing: 10,
-                runSpacing: 10,
+                spacing: 5,
+                runSpacing: 5,
                 children: [
                   "natural major",
                   "natural minor",
@@ -313,13 +367,15 @@ class _CreateCompositionDialogState
                 }).toList(),
               ),
               const SizedBox(height: 50),
+
               // TONIC SECTION
+
               const Text(
                 "Tonic",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
               Wrap(
-                spacing: 10,
-                runSpacing: 10,
+                spacing: 5,
+                runSpacing: 5,
                 children: [
                   "C", "C sharp", "D flat", "D",
                   "D sharp", "E flat", "E",
@@ -345,12 +401,13 @@ class _CreateCompositionDialogState
 
 
     // 5 - BEAT DURATION
+
       case 4:
         return SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 20),
+              // const SizedBox(height: 20),
 
               const Center(
                 child: Text("Beat Duration",
@@ -379,16 +436,17 @@ class _CreateCompositionDialogState
 
 
     // 6 - TEMPO
+
       case 5:
         return Column(
           children: [
-            const SizedBox(height: 20),
+            // const SizedBox(height: 20),
             const Text("Tempo",
                 style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
             SingleChildScrollView(
               child: Wrap(
-                spacing: 10,
-                runSpacing: 10,
+                spacing: 5,
+                runSpacing: 5,
                 children: Tempo.values.map((s) {
                   return SizedBox(
                     width: 260, // controls 2 columns
@@ -407,6 +465,7 @@ class _CreateCompositionDialogState
 
 
     // 7 - COLUMNS ADDING
+
       case 6:
         return ListView(
           children: [
@@ -429,7 +488,7 @@ class _CreateCompositionDialogState
               ),
               keyboardType: TextInputType.number,
               onChanged: (v) =>
-              beatsPerMeasure = int.tryParse(v) ?? 0,
+              beatsPerMeasure = int.tryParse(v) ?? 1,
             ),
           ],
         );
