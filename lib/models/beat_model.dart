@@ -2,16 +2,18 @@ import 'note_model.dart';
 
 class Beat {
   final String id;
-  final double beatDuration;
   final int measureId;
-  final int index;
+  final int index; // place in measure
+  final int tempo;
+  final String? musicalDynamic;
   final List<Note> notes;
 
   const Beat({
     required this.id,
-    required this.index,
-    required this.beatDuration,
     required this.measureId,
+    required this.index,
+    required this.tempo,
+    this.musicalDynamic,
     required this.notes,
   });
 }

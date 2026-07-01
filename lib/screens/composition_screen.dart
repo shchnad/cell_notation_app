@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+
 import '../enums/hand.dart';
 import '../enums/status.dart';
+import '../enums/tempo.dart';
+
 import '../models/beat_model.dart';
 import '../models/note_model.dart';
-import '../widgets/beat_widget.dart';
+
+import '../services/tonality_service.dart';
 import '../widgets/beat_widget.dart';
 
 class CompositionScreen extends StatelessWidget {
@@ -16,31 +20,53 @@ class CompositionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
+    final actionTime = DateTime.now();
+
+    final int numberOfMeasures = (config["numberOfMeasures"] as int?) ?? 0;
+    final int beatsPerMeasure = (config["beatsPerMeasure"] as int?) ?? 4;
+    final int numberOfOctaves = (config["numberOfOctaves"] as int?) ?? 8;
+
+    final int rows = numberOfOctaves * 7;
+    final int beatCount = numberOfMeasures * beatsPerMeasure;
+
     final screenHeight = MediaQuery.of(context).size.height;
+    final cellSize = screenHeight / rows;
 
-    // 56 rows must fit exactly
-    final cellSize = screenHeight / 56;
+    final tempo = (config["tempo"] as Tempo).value;
 
+    final tonality = TonalityService.getTonality(
+      config["scale"],
+      config["tonic"],
+    );
 
-    final int beatCount = config["beatCount"];
-    final double beatDuration = (config["beatDuration"] as dynamic).value;
-    final List<Beat> beats = List.generate(beatCount, (i) {
+    final pitchGrid = List.generate(
+      rows,
+          (row) => tonality[row % tonality.length],
+    );
+
+    final int totalBeats = numberOfMeasures * beatsPerMeasure;
+
+    final beats = List.generate(totalBeats, (i) {
+      final measureId = i ~/ beatsPerMeasure;
+
       return Beat(
         id: i.toString(),
         index: i,
-        beatDuration: beatDuration,
-        measureId: i ~/ 4, // temporary logic (you can improve later)
-        notes: List.generate(56, (row) {
+        tempo: tempo,
+        measureId: measureId,
+        notes: List.generate(rows, (row) {
           return Note(
             row: row,
+            pitch: pitchGrid[row],
             status: Status.silence,
-            pitch: null,
             hand: Hand.right,
-            createdAt: DateTime.now(),
+            createdAt: actionTime,
           );
         }),
       );
     });
+
 
     return Scaffold(
       body: Row(
@@ -54,29 +80,48 @@ class CompositionScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 20),
                   IconButton(
-                    icon: const Icon(Icons.home, color: Colors.white, size: 40),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    icon: const Icon(Icons.home,
+                        color: Colors.white, size: 40),
+                    onPressed: () => Navigator.pop(context),
                   ),
                   const SizedBox(height: 20),
-                  const Icon(Icons.music_note, color: Colors.white, size: 40),
+                  const Icon(Icons.music_note,
+                      color: Colors.white, size: 40),
                   const SizedBox(height: 20),
-                  const Icon(Icons.settings, color: Colors.white, size: 40),
+                  const Icon(Icons.settings,
+                      color: Colors.white, size: 40),
                 ],
               ),
             ),
           ),
-          // GRID AREA
+
+          // GRID
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: beats.map((beat) {
-                  return BeatWidget(
-                    beat: beat,
-                    cellSize: cellSize,
+                children: beats.asMap().entries.map((entry) {
+                  final i = entry.key;
+                  final beat = entry.value;
+
+                  final isMeasureStart = i % beatsPerMeasure == 0;
+
+                  return Row(
+                    children: [
+                      // measure separator
+                      if (isMeasureStart && i != 0)
+                        Container(
+                          width: 3,
+                          height: screenHeight,
+                          color: Colors.black,
+                        ),
+
+                      BeatWidget(
+                        beat: beat,
+                        cellSize: cellSize,
+                      ),
+                    ],
                   );
                 }).toList(),
               ),

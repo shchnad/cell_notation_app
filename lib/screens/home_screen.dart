@@ -1,11 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import '../dialog/create_composition_dialog.dart';
-import '../enums/articulation.dart';
-import '../enums/hand.dart';
-import '../enums/status.dart';
-import '../models/beat_model.dart';
-import '../models/note_model.dart';
 import 'composition_screen.dart';
 import '../services/auth_service.dart';
 
@@ -100,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
 
-            // 📱 BOTTOM MENU
+            // BOTTOM MENU
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(

@@ -1,4 +1,4 @@
-enum Dynamic {
+enum MusicalDynamic {
   piano('p'),
   pianoPiano('pp'),
   pianoPianoPiano('ppp'),
@@ -12,5 +12,5 @@ enum Dynamic {
   sforzando('sfz');
 
   final String? value;
-  const Dynamic(this.value);
+  const MusicalDynamic(this.value);
 }

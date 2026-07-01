@@ -1,5 +1,5 @@
 class TonalityService {
-  static List<String> getScale(String scale, String tonic) {
+  static List<String> getTonality(String scale, String tonic) {
     final scaleArrayName = '$scale $tonic';
     switch (scaleArrayName) {
 
@@ -16,9 +16,6 @@ class TonalityService {
 
       case 'natural major D':
         return ['1+', '2', '3', '4+', '5', '6', '7'];
-
-      case 'natural major D sharp':
-        return ['1++', '2+', '3+', '4++', '5+', '6+', '7+'];
 
       case 'natural major E flat':
         return ['1', '2', '3-', '4', '5', '6-', '7-'];
@@ -38,17 +35,11 @@ class TonalityService {
       case 'natural major G':
         return ['1', '2', '3', '4+', '5', '6', '7'];
 
-      case 'natural major G sharp':
-        return ['1+', '2+', '3+', '4++', '5+', '6+', '7+'];
-
       case 'natural major A flat':
         return ['1', '2-', '3-', '4', '5', '6-', '7-'];
 
       case 'natural major A':
         return ['1+', '2', '3', '4+', '5+', '6', '7'];
-
-      case 'natural major A sharp':
-        return ['1++', '2+', '3+', '4++', '5++', '6+', '7+'];
 
       case 'natural major B flat':
         return ['1', '2', '3-', '4', '5', '6', '7-'];
@@ -60,9 +51,6 @@ class TonalityService {
 
       case 'natural minor C sharp':
         return ['1+', '2+', '3', '4+', '5+', '6', '7'];
-
-      case 'natural minor D flat':
-        return ['1-', '2-', '3-', '4-', '5-', '6-', '7--'];
 
       case 'natural minor D':
         return ['1', '2', '3', '4', '5', '6', '7-'];
@@ -81,9 +69,6 @@ class TonalityService {
 
       case 'natural minor F sharp':
         return ['1+', '2', '3', '4+', '5+', '6', '7'];
-
-      case 'natural minor G flat':
-        return ['1-', '2-', '3--', '4-', '5-', '6-', '7--'];
 
       case 'natural minor G':
         return ['1', '2', '3-', '4', '5', '6', '7-'];

@@ -1,14 +1,17 @@
 class ContentFilterService {
-
   static const List<String> bannedWords = [
     'fuck',
-    'bit',
     'asshole',
   ];
 
-  static bool isValid(String text) {
-    final lower = text.toLowerCase();
+  static String _normalize(String text) {
+    return text
+        .toLowerCase()
+        .replaceAll(RegExp(r'[^a-z0-9]'), '');
+  }
 
-    return !bannedWords.any((word) => lower.contains(word));
+  static bool isValid(String text) {
+    final clean = _normalize(text);
+    return !bannedWords.any((w) => clean.contains(_normalize(w)));
   }
 }

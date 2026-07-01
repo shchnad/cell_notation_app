@@ -9,7 +9,7 @@ import '../enums/ornament.dart';
 class Note {
   final int row;
   final Status status;
-  final pitch;
+  final String pitch;
   final Hand hand;
   final Finger? finger;
   final Accidental? accidental;
