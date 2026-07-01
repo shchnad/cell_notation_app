@@ -20,15 +20,12 @@ class CompositionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-    final actionTime = DateTime.now();
-
-    final int numberOfMeasures = (config["numberOfMeasures"] as int?) ?? 0;
-    final int beatsPerMeasure = (config["beatsPerMeasure"] as int?) ?? 4;
-    final int numberOfOctaves = (config["numberOfOctaves"] as int?) ?? 8;
+    final int numberOfMeasures = config["numberOfMeasures"] ?? 0;
+    final int beatsPerMeasure = config["beatsPerMeasure"] ?? 4;
+    final int numberOfOctaves = config["numberOfOctaves"] ?? 8;
 
     final int rows = numberOfOctaves * 7;
-    final int beatCount = numberOfMeasures * beatsPerMeasure;
+    final int totalBeats = numberOfMeasures * beatsPerMeasure;
 
     final screenHeight = MediaQuery.of(context).size.height;
     final cellSize = screenHeight / rows;
@@ -45,7 +42,7 @@ class CompositionScreen extends StatelessWidget {
           (row) => tonality[row % tonality.length],
     );
 
-    final int totalBeats = numberOfMeasures * beatsPerMeasure;
+    final actionTime = DateTime.now();
 
     final beats = List.generate(totalBeats, (i) {
       final measureId = i ~/ beatsPerMeasure;
@@ -67,11 +64,10 @@ class CompositionScreen extends StatelessWidget {
       );
     });
 
-
     return Scaffold(
       body: Row(
         children: [
-          // LEFT SIDEBAR
+          // SIDEBAR
           Container(
             width: 50,
             color: Colors.black,
@@ -95,33 +91,16 @@ class CompositionScreen extends StatelessWidget {
             ),
           ),
 
-          // GRID
+          // GRID (horizontal only)
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: beats.asMap().entries.map((entry) {
-                  final i = entry.key;
-                  final beat = entry.value;
-
-                  final isMeasureStart = i % beatsPerMeasure == 0;
-
-                  return Row(
-                    children: [
-                      // measure separator
-                      if (isMeasureStart && i != 0)
-                        Container(
-                          width: 3,
-                          height: screenHeight,
-                          color: Colors.black,
-                        ),
-
-                      BeatWidget(
-                        beat: beat,
-                        cellSize: cellSize,
-                      ),
-                    ],
+                children: beats.map((beat) {
+                  return BeatWidget(
+                    beat: beat,
+                    cellSize: cellSize,
                   );
                 }).toList(),
               ),

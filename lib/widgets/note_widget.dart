@@ -1,12 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../dialog/note_dialog.dart';
-import '../models/note_model.dart';
+
 import '../enums/status.dart';
 import '../enums/hand.dart';
-import '../enums/articulation.dart';
 
+import '../models/note_model.dart';
 
-class NoteWidget extends StatelessWidget {
+import '../dialog/note_dialog.dart';
+
+class NoteWidget extends StatefulWidget {
   final Note note;
   final double size;
 
@@ -17,41 +19,70 @@ class NoteWidget extends StatelessWidget {
   });
 
   @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onDoubleTap: () {
-        showDialog(
-          context: context,
-          builder: (_) => NoteDialog(note: note),
-        );
-      },
-      child: SizedBox(
-        width: size,
-        height: size,
-        child: Container(
-          decoration: BoxDecoration(
-            color: _color(),
-            border: Border.all(
-              color: Colors.grey.shade300,
-              width: 0.5,
-            ),
-          ),
-        ),
-      ),
+  State<NoteWidget> createState() => _NoteWidgetState();
+}
+
+class _NoteWidgetState extends State<NoteWidget> {
+
+  void _onTap() {
+    setState(() {
+      if (widget.note.status == Status.start) {
+        widget.note.status = Status.silence;
+      } else {
+        widget.note.status = Status.start;
+      }
+    });
+  }
+
+  void _onLongPress() {
+    setState(() {
+      if (widget.note.status == Status.hold) {
+        widget.note.status = Status.silence;
+      } else {
+        widget.note.status = Status.hold;
+      }
+    });
+  }
+
+  void _onDoubleTap() {
+    showDialog(
+      context: context,
+      builder: (_) => NoteDialog(note: widget.note),
     );
   }
 
   Color _color() {
-    switch (note.status) {
+    switch (widget.note.status) {
       case Status.silence:
         return Colors.white;
 
       case Status.start:
-        return note.hand == Hand.left ? Colors.blue : Colors.black;
+        return widget.note.hand == Hand.left
+            ? Colors.blue
+            : Colors.black;
 
       case Status.hold:
-        return (note.hand == Hand.left ? Colors.blue : Colors.black)
+        return (widget.note.hand == Hand.left
+            ? Colors.blue
+            : Colors.black)
             .withOpacity(0.4);
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: _onTap,
+      onLongPress: _onLongPress,
+      onDoubleTap: _onDoubleTap,
+      child: Container(
+        width: widget.size,
+        height: widget.size,
+        decoration: BoxDecoration(
+          color: _color(),
+          border: Border.all(color: Colors.grey.shade300, width: 0.5),
+        ),
+      ),
+    );
   }
 }

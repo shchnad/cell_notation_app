@@ -8,17 +8,17 @@ import '../enums/ornament.dart';
 
 class Note {
   final int row;
-  final Status status;
+  Status status;
   final String pitch;
-  final Hand hand;
-  final Finger? finger;
-  final Accidental? accidental;
-  final Articulation? articulation;
-  final Ornament? ornament;
-  final Nuance? nuance;
+  Hand hand;
+  Finger? finger;
+  Accidental? accidental;
+  Articulation? articulation;
+  Ornament? ornament;
+  Nuance? nuance;
   final DateTime createdAt;
 
-  const Note({
+  Note({
     required this.row,
     required this.status,
     required this.pitch,

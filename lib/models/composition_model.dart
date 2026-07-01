@@ -13,7 +13,7 @@ class Composition {
   final double beatDuration;
   final List<Beat> beats;
   final DateTime createdAt;
-  final DateTime updatedAt;
+  DateTime updatedAt;
 
   Composition({
     required this.id,
@@ -27,6 +27,6 @@ class Composition {
     required this.beatDuration,
     required this.beats,
     required this.createdAt,
-    required this.updatedAt, required tempo,
+    required this.updatedAt,
   });
 }
