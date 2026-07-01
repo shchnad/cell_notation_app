@@ -31,6 +31,7 @@ class NoteDialog extends StatelessWidget {
 
           _row("Row", note.row.toString()),
           _row("Status", note.status.name),
+          _row("Pitch", note.pitch),
           _row("Accidental", note.accidental?.name ?? ""),
           _row("Hand", note.hand.name),
           _row("Finger", note.finger?.name ?? ""),

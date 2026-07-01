@@ -10,6 +10,7 @@ import '../models/note_model.dart';
 import '../services/tonality_service.dart';
 import '../widgets/beat_widget.dart';
 
+
 class CompositionScreen extends StatelessWidget {
   final Map<String, dynamic> config;
 
@@ -20,6 +21,7 @@ class CompositionScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     final int numberOfMeasures = config["numberOfMeasures"] ?? 0;
     final int beatsPerMeasure = config["beatsPerMeasure"] ?? 4;
     final int numberOfOctaves = config["numberOfOctaves"] ?? 8;
@@ -32,30 +34,26 @@ class CompositionScreen extends StatelessWidget {
 
     final tempo = (config["tempo"] as Tempo).value;
 
-    final tonality = TonalityService.getTonality(
+    final List<String> tonality = TonalityService.getTonality(
       config["scale"],
       config["tonic"],
     );
+    final int scaleLength = tonality.length;
 
-    final pitchGrid = List.generate(
-      rows,
-          (row) => tonality[row % tonality.length],
-    );
+    final DateTime actionTime = DateTime.now();
 
-    final actionTime = DateTime.now();
-
-    final beats = List.generate(totalBeats, (i) {
-      final measureId = i ~/ beatsPerMeasure;
-
+    final List<Beat> beats = List.generate(totalBeats, (i) {
+      final int measureId = i ~/ beatsPerMeasure;
       return Beat(
         id: i.toString(),
         index: i,
         tempo: tempo,
         measureId: measureId,
         notes: List.generate(rows, (row) {
+          final int invertedRow = rows - 1 - row;
           return Note(
             row: row,
-            pitch: pitchGrid[row],
+            pitch: tonality[invertedRow % scaleLength],
             status: Status.silence,
             hand: Hand.right,
             createdAt: actionTime,
@@ -63,6 +61,9 @@ class CompositionScreen extends StatelessWidget {
         }),
       );
     });
+
+
+    // UI
 
     return Scaffold(
       body: Row(
@@ -91,7 +92,7 @@ class CompositionScreen extends StatelessWidget {
             ),
           ),
 
-          // GRID (horizontal only)
+          // HORIZONTAL GRID ONLY
           Expanded(
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,

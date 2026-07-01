@@ -1,11 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../models/note_model.dart';
 import '../enums/status.dart';
 import '../enums/hand.dart';
-
-import '../models/note_model.dart';
-
 import '../dialog/note_dialog.dart';
 
 class NoteWidget extends StatefulWidget {
@@ -26,21 +23,19 @@ class _NoteWidgetState extends State<NoteWidget> {
 
   void _onTap() {
     setState(() {
-      if (widget.note.status == Status.start) {
-        widget.note.status = Status.silence;
-      } else {
-        widget.note.status = Status.start;
-      }
+      widget.note.status =
+      widget.note.status == Status.start
+          ? Status.silence
+          : Status.start;
     });
   }
 
   void _onLongPress() {
     setState(() {
-      if (widget.note.status == Status.hold) {
-        widget.note.status = Status.silence;
-      } else {
-        widget.note.status = Status.hold;
-      }
+      widget.note.status =
+      widget.note.status == Status.hold
+          ? Status.silence
+          : Status.hold;
     });
   }
 
@@ -51,7 +46,7 @@ class _NoteWidgetState extends State<NoteWidget> {
     );
   }
 
-  Color _color() {
+  Color _backgroundColor() {
     switch (widget.note.status) {
       case Status.silence:
         return Colors.white;
@@ -64,9 +59,15 @@ class _NoteWidgetState extends State<NoteWidget> {
       case Status.hold:
         return (widget.note.hand == Hand.left
             ? Colors.blue
-            : Colors.black)
-            .withOpacity(0.4);
+            : Colors.black);
     }
+  }
+
+  Color _textColor() {
+    if (widget.note.status == Status.start) {
+      return Colors.white;
+    }
+    return Colors.transparent;
   }
 
   @override
@@ -74,13 +75,28 @@ class _NoteWidgetState extends State<NoteWidget> {
     return GestureDetector(
       onTap: _onTap,
       onLongPress: _onLongPress,
-      onDoubleTap: _onDoubleTap,
-      child: Container(
+      onDoubleTap: _onDoubleTap, //
+      child: SizedBox(
         width: widget.size,
         height: widget.size,
-        decoration: BoxDecoration(
-          color: _color(),
-          border: Border.all(color: Colors.grey.shade300, width: 0.5),
+        child: Container(
+          decoration: BoxDecoration(
+            color: _backgroundColor(),
+            border: Border.all(
+              color: Colors.grey.shade300,
+              width: 0.5,
+            ),
+          ),
+          child: Center(
+            child: Text(
+              widget.note.pitch,
+              style: TextStyle(
+                fontSize: widget.size * 0.4,
+                fontWeight: FontWeight.bold,
+                color: _textColor(),
+              ),
+            ),
+          ),
         ),
       ),
     );
