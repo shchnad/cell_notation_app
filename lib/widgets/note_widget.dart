@@ -9,12 +9,14 @@ class NoteWidget extends StatefulWidget {
   final Note note;
   final double size;
   final Hand currentHand;
+  final double topBorderWidth;
 
   const NoteWidget({
     super.key,
     required this.note,
     required this.size,
     required this.currentHand,
+    this.topBorderWidth = 0.5,
   });
 
   @override
@@ -80,16 +82,21 @@ class _NoteWidgetState extends State<NoteWidget> {
         child: Container(
           decoration: BoxDecoration(
             color: _backgroundColor(),
-            border: Border.all(
-              color: Colors.grey.shade300,
-              width: 0.5,
+            border: Border(
+              left: BorderSide(color: Colors.grey.shade300, width: 0.5),
+              right: BorderSide(color: Colors.grey.shade300, width: 0.5),
+              bottom: BorderSide(color: Colors.grey.shade300, width: 0.5),
+              top: BorderSide(
+                color: Colors.grey,
+                width: widget.topBorderWidth,
+              ),
             ),
           ),
           child: Center(
             child: Text(
               widget.note.pitch,
               style: TextStyle(
-                fontSize: widget.size * 0.4,
+                fontSize: widget.size * 0.6,
                 fontWeight: FontWeight.bold,
                 color: _textColor(),
               ),

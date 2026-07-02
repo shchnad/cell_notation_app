@@ -31,10 +31,8 @@ class _CompositionScreenState extends State<CompositionScreen> {
 
     final int numberOfMeasures =
         (widget.config["numberOfMeasures"] as int?) ?? 0;
-
     final int beatsPerMeasure =
         (widget.config["beatsPerMeasure"] as int?) ?? 4;
-
     final int numberOfOctaves =
         (widget.config["numberOfOctaves"] as int?) ?? 8;
 
@@ -93,6 +91,12 @@ class _CompositionScreenState extends State<CompositionScreen> {
 
                   const SizedBox(height: 20),
 
+                  IconButton(
+                    icon: const Icon(Icons.home,
+                        color: Colors.white, size: 40),
+                    onPressed: () => Navigator.pop(context),
+                  ),
+
                   // HAND TOGGLE
                   IconButton(
                     icon: Icon(
@@ -112,12 +116,6 @@ class _CompositionScreenState extends State<CompositionScreen> {
                   ),
 
                   const SizedBox(height: 20),
-
-                  IconButton(
-                    icon: const Icon(Icons.home,
-                        color: Colors.white, size: 40),
-                    onPressed: () => Navigator.pop(context),
-                  ),
 
                   const SizedBox(height: 20),
                   const Icon(Icons.music_note,
