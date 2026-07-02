@@ -96,7 +96,7 @@ class _NoteWidgetState extends State<NoteWidget> {
             child: Text(
               widget.note.pitch,
               style: TextStyle(
-                fontSize: widget.size * 0.6,
+                fontSize: widget.size * 0.7,
                 fontWeight: FontWeight.bold,
                 color: _textColor(),
               ),
